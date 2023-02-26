@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Typewriter Rhyme Effect</title>
+    <style>
+      body {
+        font-family: Courier, monospace;
+        font-size: 24px;
+        line-height: 1.5;
+        margin: 0;
+        padding: 0;
+      }
+      
+      .neon {
+        color: #ff00ff;
+        text-shadow: 0 0 10px #ff00ff;
+      }
+      
+      .cursor {
+        display: inline-block;
+        width: 8px;
+        height: 24px;
+        background-color: #000;
+        animation: blink 0.7s infinite;
+        margin-left: 5px;
+      }
+      
+      .note {
+        position: absolute;
+        display: block;
+        width: 20px;
+        height: 20px;
+        font-size: 20px;
+        transform: translate(-50%, -50%);
+        pointer-events: none;
+      }
+      
+      @keyframes blink {
+        50% {
+          opacity: 0;
+        }
+      }
+    </style>
+  </head>
+  
+  <body>
+    <p id="typewriter"></p>
+    <div class="cursor"></div>
+    
+    <footer>
+      <a href="https://twitter.com/Radvoice1"><img src="twitter.png"></a>
+      <span>|</span>
+      <a href="mailto:elevenjamz@gmail.com">Contact us</a>
+    </footer>
+    
+    <script>
+      const words = ["Gather 'round and lend an ear", "For a tale that's sure to steer", "Your attention to the blockchain sphere", "Where SuperAds on ENS appear"];
+      const typer = document.getElementById('typewriter');
+      let i = 0;
+      let j = 0;
+      
+      function type() {
+        if (i < words.length) {
+          if (j < words[i].length) {
+            const char = words[i][j];
+            let highlighted = false;
+            if (/\b\w+\b/.test(char)) {
+              const word = words[i].split(' ')[j];
+              if (/\w*[aeiou]{1,}\w*[aeiou]{1,}\w*/i.test(word)) {
+                typer.innerHTML += `<span class="neon">${char}</span>`;
+                highlighted = true;
+              }
+            }
+            if (!highlighted) {
+              typer.innerHTML += char;
+            }
+            j++;
+          } else {
+            typer.innerHTML += '<br />';
+            i++;
+            j = 0;
+          }
+          setTimeout(type, Math.random() * 200 + 50);
+        }
+      }
+      
+      type();
+      
+      document.addEventListener('click', function(e) {
+        const note = document.createElement('span');
+        note.classList.add('note');
+        note.innerHTML = '🎵';
+        note.style.top = `${e.pageY}px`;
+        note.style.left = `${e.pageX}px`;
+        document.body.appendChild(note);
+        setTimeout(function() {
+          note.remove();
+        }, 1500);
+      });
+    </script>
+  </body>
+</html>
